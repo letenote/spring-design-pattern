@@ -5,19 +5,22 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(classes = SingletonApplication.class)
 class SingletonApplicationTest {
 
 	@Autowired
-	private ApplicationContext applicationContext;
+	private final ApplicationContext applicationContext;
+
+	SingletonApplicationTest(ApplicationContext applicationContext) {
+		this.applicationContext = applicationContext;
+	}
 
 	@Test
 	void singletonBasicTest() {
-		/**
-		 * in this test, counter like count total hit in this application
-		 * this test case, Counter implemented in all endpoint controller for increment hit from clients
+		/*
+		  in this test, counter like count total hit in this application
+		  this test case, Counter implemented in all endpoint controller for increment hit from clients
 		 */
 		Counter AuthController = applicationContext.getBean(Counter.class);
 		Counter ArticleController = applicationContext.getBean(Counter.class);
@@ -25,13 +28,13 @@ class SingletonApplicationTest {
 		Counter AdvertiseController = applicationContext.getBean(Counter.class);
 		Counter MediaController = applicationContext.getBean(Counter.class);
 
-		/**
-		 * reset counter valur to 0
+		/*
+		  reset counter valur to 0
 		 */
 		AuthController.resetCounter();
 		Assertions.assertEquals(AuthController.getValueCounter(), 0);
 		System.err.println("singletonBasicTest -> reset value -> result:  " + CommentController.getValueCounter() + " expected: 0");
-		/**
+		/*
 		 * in this case there is 5 hit in endpoint
 		 * @Test expected actual value is 5
 		 */
@@ -51,7 +54,7 @@ class SingletonApplicationTest {
 
 	@Test
 	void singletonMutableProblemTest() throws InterruptedException {
-		/**
+		/*
 		 * - best practice in singleton object must be immutable (can't be change or set)
 		 * - if implement singleton object mutable, make sure it doesn't happen "race condition"
 		 *   if any change value in same time must be handler
@@ -61,7 +64,7 @@ class SingletonApplicationTest {
 
 		incrementCounterAsync(CommentController,500_000);
 		incrementCounterAsync(AdvertiseController, 500_000);
-		/**
+		/*
 		 * @Test expected counter value is 100 + 100 = 200
 		 * but in same time hit endpoint any miss, there must be a "race condition"
 		 */
@@ -75,15 +78,15 @@ class SingletonApplicationTest {
 
 	@Test
 	void singletonMutableProblemSolverTest() throws InterruptedException {
-		/**
-		 * add "synchronized" for await thread -> handler same time for set counter
+		/*
+		  add "synchronized" for await thread -> handler same time for set counter
 		 */
 		Counter CommentController = applicationContext.getBean(Counter.class);
 		Counter AdvertiseController = applicationContext.getBean(Counter.class);
 
 		incrementCounterAsyncAwait(CommentController,500_000);
 		incrementCounterAsyncAwait(AdvertiseController, 500_000);
-		/**
+		/*
 		 * @Test expected counter value is 100 + 100 = 200;
 		 * result should be same as expected value
 		 */
