@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ProductBuilderPrototype {
-
 	@Bean
 	@Scope("prototype")
 	public Product laptopProductCategory(){
@@ -14,7 +13,6 @@ public class ProductBuilderPrototype {
 				.category(Category.LAPTOP)
 				.build();
 	}
-
 	@Bean
 	@Scope("prototype")
 	public Product gadgetProductCategory(){
