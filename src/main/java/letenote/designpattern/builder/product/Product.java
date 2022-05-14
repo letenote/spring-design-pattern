@@ -1,16 +1,22 @@
-package letenote.designpattern.builder;
+package letenote.designpattern.builder.product;
 
 public class Product {
-	private String name;
-	private Long price;
-	private String description;
-	private String image;
+	private final String name;
+	private final Long price;
+	private final String description;
+	private final String image;
+	private final Category category;
 
-	public Product(String name, Long price, String description, String image) {
+	public Product(String name, Long price, String description, String image, Category category) {
 		this.name = name;
 		this.price = price;
 		this.description = description;
 		this.image = image;
+		this.category = category;
+	}
+
+	public Category getCategory() {
+		return category;
 	}
 
 	public String getName() {
@@ -36,6 +42,7 @@ public class Product {
 				", price=" + price +
 				", description='" + description + '\'' +
 				", image='" + image + '\'' +
+				", category=" + category +
 				'}';
 	}
 
@@ -48,6 +55,7 @@ public class Product {
 		private Long price;
 		private String description;
 		private String image;
+		private Category category;
 
 		public ProductBuilder() {}
 		public Product.ProductBuilder name(final String name){
@@ -66,12 +74,17 @@ public class Product {
 			this.image = image;
 			return this;
 		}
+		public Product.ProductBuilder category(final Category category){
+			this.category = category;
+			return this;
+		}
 		public Product build(){
 			return new Product(
 					this.name,
 					this.price,
 					this.description,
-					this.image
+					this.image,
+					this.category
 			);
 		}
 	}
