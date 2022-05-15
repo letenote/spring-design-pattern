@@ -1,10 +1,10 @@
 package letenote.designpattern.builder.product;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
-@Component
+@Configuration
 public class ProductBuilderPrototype {
 	@Bean
 	@Scope("prototype")
