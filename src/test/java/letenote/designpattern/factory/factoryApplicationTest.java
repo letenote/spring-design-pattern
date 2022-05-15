@@ -5,10 +5,12 @@ import letenote.designpattern.factory.socialmedia.SocialMediaType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.BeanCreationException;
+import org.springframework.beans.factory.NoUniqueBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
+
+import java.util.function.BooleanSupplier;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -70,5 +72,12 @@ class factoryApplicationTest {
 		var getExceptionMessageExpected = applicationContext.getBean("unsupportedSocialMediaMessage");
 
 		assertEquals(getExceptionMessageExpected, getExceptionMessage);
+	}
+
+	@Test
+	void duplicateBeansTest(){
+		Assertions.assertDoesNotThrow(
+				() -> applicationContext.getBean(SocialMediaInterface.class, SocialMediaType.INSTAGRAM)
+		);
 	}
 }
