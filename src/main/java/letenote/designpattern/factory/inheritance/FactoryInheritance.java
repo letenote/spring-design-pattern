@@ -10,17 +10,17 @@ import org.springframework.context.annotation.Scope;
 
 @Configuration
 public class FactoryInheritance {
-	@Bean
+	@Bean(value = "facebookSocialMediaFactoryInheritance")
 	@Scope("prototype")
 	public SocialMediaInterface facebookSocialMediaFactoryInheritance(){
 		return new FacebookSocialMedia();
 	}
-	@Bean
+	@Bean(value = "twitterSocialMediaFactoryInheritance")
 	@Scope("prototype")
 	public SocialMediaInterface twitterSocialMediaFactoryInheritance(){
 		return new TwitterSocialMedia();
 	}
-	@Bean
+	@Bean(value = "instagramSocialMediaFactoryInheritance")
 	@Scope("prototype")
 	public SocialMediaInterface instagramSocialMediaFactoryInheritance(){
 		return new InstagramSocialMedia();

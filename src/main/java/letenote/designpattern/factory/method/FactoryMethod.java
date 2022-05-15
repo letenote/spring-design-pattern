@@ -12,14 +12,12 @@ import org.springframework.context.annotation.Scope;
 public class FactoryMethod {
 	@Autowired
 	ApplicationContext applicationContext;
-
 	@Bean
 	@Scope("singleton")
 	public String unsupportedSocialMediaMessage(){
 		return "Unsupported Media Type";
 	}
-
-	@Bean
+	@Bean(value = "socialMediaFactoryMethod")
 	@Primary
 	@Scope("prototype")
 	public SocialMediaInterface socialMedia(SocialMediaType type) throws Exception {
