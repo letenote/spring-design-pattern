@@ -7,3 +7,4 @@ Project Spring Boot Design Pattern
 3. builder
 4. factory
    1. method
+   2. inheritance
