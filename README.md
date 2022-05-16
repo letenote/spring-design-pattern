@@ -8,3 +8,4 @@ Project Spring Boot Design Pattern
 4. factory
    1. method
    2. inheritance
+   3. abstract

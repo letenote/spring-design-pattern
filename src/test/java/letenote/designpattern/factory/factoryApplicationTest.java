@@ -1,16 +1,18 @@
 package letenote.designpattern.factory;
 
+import letenote.designpattern.factory.abstracts.CreditCardPaymentFactory;
+import letenote.designpattern.factory.abstracts.KlikBcaPaymentFactory;
+import letenote.designpattern.factory.abstracts.OvoPaymentFactory;
+import letenote.designpattern.factory.abstracts.PaymentGateAway;
+import letenote.designpattern.factory.abstracts.utils.PaymentMethodType;
 import letenote.designpattern.factory.socialmedia.SocialMediaInterface;
 import letenote.designpattern.factory.socialmedia.SocialMediaType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.BeanCreationException;
-import org.springframework.beans.factory.NoUniqueBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
-
-import java.util.function.BooleanSupplier;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -120,5 +122,166 @@ class factoryApplicationTest {
 		Assertions.assertEquals(instagram.getUrl(), instagramUrlExpected);
 		Assertions.assertEquals(instagram.getType().toString(), instagramTypeExpected);
 		Assertions.assertEquals(instagram.toString(), instagramExpected);
+	}
+
+	@Test
+	void factoryAbstractsCreditCardChargeTest(){
+		var paymentIdExpected = "payment-cc-id";
+		var amountExpected = 1000000L;
+		var feeExpected = 50000;
+		var paymentMethodExpected = PaymentMethodType.CREDITCARD;
+		var toStringExpected = "CreditCardChargePaymentRequest{paymentID='payment-cc-id', amount=1000000}";
+		CreditCardPaymentFactory creditCardPaymentFactory = applicationContext.getBean(CreditCardPaymentFactory.class);
+		var userTopUpWithCreditCard = PaymentGateAway.chargePayment(
+				creditCardPaymentFactory,
+				paymentIdExpected,
+				amountExpected
+		);
+
+		System.out.println(userTopUpWithCreditCard.toString());
+		Assertions.assertEquals(userTopUpWithCreditCard.getPaymentID(), paymentIdExpected);
+		Assertions.assertEquals(userTopUpWithCreditCard.getAmount(), amountExpected);
+		Assertions.assertEquals(userTopUpWithCreditCard.getFee(), feeExpected);
+		Assertions.assertEquals(userTopUpWithCreditCard.getPaymentMethod(), paymentMethodExpected);
+		Assertions.assertEquals(userTopUpWithCreditCard.toString(), toStringExpected);
+	}
+
+	@Test
+	void factoryAbstractsCreditCardCancelTest(){
+		var paymentIdExpected = "payment-cc-id";
+		var paymentMethodExpected = PaymentMethodType.CREDITCARD;
+		var toStringExpected = "CreditCardCancelPaymentRequest{paymentID='payment-cc-id'}";
+		CreditCardPaymentFactory creditCardPaymentFactory = applicationContext.getBean(CreditCardPaymentFactory.class);
+		var userCancelTopUpWithCreditCard = PaymentGateAway.cancelPayment(
+				creditCardPaymentFactory,
+				paymentIdExpected
+		);
+
+		Assertions.assertEquals(userCancelTopUpWithCreditCard.getPaymentID(), paymentIdExpected);
+		Assertions.assertEquals(userCancelTopUpWithCreditCard.getPaymentMethod(), paymentMethodExpected);
+		Assertions.assertEquals(userCancelTopUpWithCreditCard.toString(), toStringExpected);
+	}
+
+	@Test
+	void factoryAbstractsCreditCardGetBalanceTest(){
+		var userIdExpected = "user-id";
+		var paymentMethodExpected = PaymentMethodType.CREDITCARD;
+		var toStringExpected = "CreditCardGetBalancePaymentRequest{userID='user-id'}";
+		CreditCardPaymentFactory creditCardPaymentFactory = applicationContext.getBean(CreditCardPaymentFactory.class);
+		var getBalanceUserInCreditCard = PaymentGateAway.getBalancePayment(
+				creditCardPaymentFactory,
+				userIdExpected
+		);
+
+		Assertions.assertEquals(getBalanceUserInCreditCard.getUserID(), userIdExpected);
+		Assertions.assertEquals(getBalanceUserInCreditCard.getPaymentMethod(), paymentMethodExpected);
+		Assertions.assertEquals(getBalanceUserInCreditCard.toString(), toStringExpected);
+	}
+
+	@Test
+	void factoryAbstractsKlikBcaChargeTest(){
+		var paymentIdExpected = "payment-klik-bca-id";
+		var amountExpected = 1000000L;
+		var feeExpected = 6000;
+		var paymentMethodExpected = PaymentMethodType.KLIKBCA;
+		var toStringExpected = "KlikBcaChargePaymentRequest{paymentID='payment-klik-bca-id', amount=1000000}";
+		KlikBcaPaymentFactory klikBcaPaymentFactory = applicationContext.getBean(KlikBcaPaymentFactory.class);
+		var userTopUpWithKlikBCA = PaymentGateAway.chargePayment(
+				klikBcaPaymentFactory,
+				paymentIdExpected,
+				amountExpected
+		);
+
+		System.out.println(userTopUpWithKlikBCA.toString());
+		Assertions.assertEquals(userTopUpWithKlikBCA.getPaymentID(), paymentIdExpected);
+		Assertions.assertEquals(userTopUpWithKlikBCA.getAmount(), amountExpected);
+		Assertions.assertEquals(userTopUpWithKlikBCA.getFee(), feeExpected);
+		Assertions.assertEquals(userTopUpWithKlikBCA.getPaymentMethod(), paymentMethodExpected);
+		Assertions.assertEquals(userTopUpWithKlikBCA.toString(), toStringExpected);
+	}
+
+	@Test
+	void factoryAbstractsKlikBcaCancelTest(){
+		var paymentIdExpected = "payment-klik-bca-id";
+		var paymentMethodExpected = PaymentMethodType.KLIKBCA;
+		var toStringExpected = "KlikBcaCancelPaymentRequest{paymentID='payment-klik-bca-id'}";
+		KlikBcaPaymentFactory klikBcaPaymentFactory = applicationContext.getBean(KlikBcaPaymentFactory.class);
+		var userCancelTopUpWithKlikBCA = PaymentGateAway.cancelPayment(
+				klikBcaPaymentFactory,
+				paymentIdExpected
+		);
+
+		Assertions.assertEquals(userCancelTopUpWithKlikBCA.getPaymentID(), paymentIdExpected);
+		Assertions.assertEquals(userCancelTopUpWithKlikBCA.getPaymentMethod(), paymentMethodExpected);
+		Assertions.assertEquals(userCancelTopUpWithKlikBCA.toString(), toStringExpected);
+	}
+
+	@Test
+	void factoryAbstractsKlikBcaGetBalanceTest(){
+		var userIdExpected = "user-id";
+		var paymentMethodExpected = PaymentMethodType.KLIKBCA;
+		var toStringExpected = "KlikBcaGetBalancePaymentRequest{userID='user-id'}";
+		KlikBcaPaymentFactory klikBcaPaymentFactory = applicationContext.getBean(KlikBcaPaymentFactory.class);
+		var getBalanceUserInKlikBCA = PaymentGateAway.getBalancePayment(
+				klikBcaPaymentFactory,
+				userIdExpected
+		);
+
+		Assertions.assertEquals(getBalanceUserInKlikBCA.getUserID(), userIdExpected);
+		Assertions.assertEquals(getBalanceUserInKlikBCA.getPaymentMethod(), paymentMethodExpected);
+		Assertions.assertEquals(getBalanceUserInKlikBCA.toString(), toStringExpected);
+	}
+
+	@Test
+	void factoryAbstractsOvoChargeTest(){
+		var paymentIdExpected = "payment-ovo-id";
+		var amountExpected = 1000000L;
+		var feeExpected = 1000;
+		var paymentMethodExpected = PaymentMethodType.OVO;
+		var toStringExpected = "OvoChargePaymentRequest{paymentID='payment-ovo-id', amount=1000000}";
+		OvoPaymentFactory ovoPaymentFactory = applicationContext.getBean(OvoPaymentFactory.class);
+		var userTopUpWithOVO = PaymentGateAway.chargePayment(
+				ovoPaymentFactory,
+				paymentIdExpected,
+				amountExpected
+		);
+
+		Assertions.assertEquals(userTopUpWithOVO.getPaymentID(), paymentIdExpected);
+		Assertions.assertEquals(userTopUpWithOVO.getAmount(), amountExpected);
+		Assertions.assertEquals(userTopUpWithOVO.getFee(), feeExpected);
+		Assertions.assertEquals(userTopUpWithOVO.getPaymentMethod(), paymentMethodExpected);
+		Assertions.assertEquals(userTopUpWithOVO.toString(), toStringExpected);
+	}
+
+	@Test
+	void factoryAbstractsOvoCancelTest(){
+		var paymentIdExpected = "payment-ovo-id";
+		var paymentMethodExpected = PaymentMethodType.OVO;
+		var toStringExpected = "OvoCancelPaymentRequest{paymentID='payment-ovo-id'}";
+		OvoPaymentFactory ovoPaymentFactory = applicationContext.getBean(OvoPaymentFactory.class);
+		var userCancelTopUpWithOVO = PaymentGateAway.cancelPayment(
+				ovoPaymentFactory,
+				paymentIdExpected
+		);
+
+		Assertions.assertEquals(userCancelTopUpWithOVO.getPaymentID(), paymentIdExpected);
+		Assertions.assertEquals(userCancelTopUpWithOVO.getPaymentMethod(), paymentMethodExpected);
+		Assertions.assertEquals(userCancelTopUpWithOVO.toString(), toStringExpected);
+	}
+
+	@Test
+	void factoryAbstractsOvoGetBalanceTest(){
+		var userIdExpected = "user-id";
+		var paymentMethodExpected = PaymentMethodType.OVO;
+		var toStringExpected = "OvoGetBalancePaymentRequest{userID='user-id'}";
+		OvoPaymentFactory ovoPaymentFactory = applicationContext.getBean(OvoPaymentFactory.class);
+		var getBalanceUserInOVO = PaymentGateAway.getBalancePayment(
+				ovoPaymentFactory,
+				userIdExpected
+		);
+
+		Assertions.assertEquals(getBalanceUserInOVO.getUserID(), userIdExpected);
+		Assertions.assertEquals(getBalanceUserInOVO.getPaymentMethod(), paymentMethodExpected);
+		Assertions.assertEquals(getBalanceUserInOVO.toString(), toStringExpected);
 	}
 }
