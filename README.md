@@ -8,3 +8,4 @@ Project Spring Boot Design Pattern with unit test
 4. factory
    1. method
    2. inheritance
+   3. abstract
